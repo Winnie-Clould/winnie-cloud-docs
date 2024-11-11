@@ -1,0 +1,54 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    
+jobs:
+  build:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache yarn pnp
+        id: yarn-pnp
+        uses: actions/cache@v4
+        with:
+          path: |
+            .vitepress/cache
+            .vitepress/unplugged
+            .vitepress/install-state.gz
+            .pnp.cjs
+            .pnp.loader.mjs
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('.yarnrc.yml') }}
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        if: steps.yarn-pnp.outputs.cache-hit != 'true'
+        run: yarn install
+
+      - name: Build project
+        run: yarn build
+
+      - name: Publish app
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages deploy ./dist --project-name=winnie-cloud-docs

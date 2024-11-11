@@ -1,0 +1,20 @@
+{
+    "name": "wn-doc",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "packageManager": "yarn@4.5.1",
+    "type": "module",
+    "scripts": {
+        "dev": "vitepress dev",
+        "build": "vitepress build",
+        "serve": "vitepress serve"
+    },
+    "devDependencies": {
+        "html-entities": "^2.5.2",
+        "medium-zoom": "^1.1.0",
+        "sass": "^1.80.6",
+        "vitepress": "1.5.0",
+        "vue": "^3.5.12"
+    }
+}
