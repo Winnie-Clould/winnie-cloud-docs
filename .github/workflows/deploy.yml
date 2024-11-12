@@ -27,8 +27,9 @@ jobs:
         with:
           path: |
             .vitepress/cache
-            .vitepress/unplugged
-            .vitepress/install-state.gz
+            .yarn/unplugged
+            .yarn/install-state.gz
+            .yarn/cache
             .pnp.cjs
             .pnp.loader.mjs
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('.yarnrc.yml') }}
